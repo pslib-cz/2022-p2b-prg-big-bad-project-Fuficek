@@ -13,6 +13,10 @@ příště budu commitovat sem.
 Jedná se o základní zobrazování šachovnice a většina času byla investována do co nejpříznivějšího generování šachovnice, a optimalizacím v algoritmu vykreslování. Také v každé třídě šachových figurek jsou implementovány metody pro kontrolu legálních tahů. 
 * Abych nemusel pokaždé procházet celé pole šachovnice pro nalezení hledané figury, uchovávám pozici jednotlivých figurek v jejich třídách, což obstarává komplikovanější a hůře čitelný, ale rychlejší kód. Další možné řešení bylo použít dictionary pro uchovávání pozic jednotlivých figur, ale kód byl poté výrazně pomalejší.
 
+## Commit 2 - Update 20.5.2023
+* Zprovoznil jsem pohyb jednotlivých figurek na poli společně se základní kontrolou legálních tahů, napříkald jezdci se hýbou pouze po Lkách, střelci pouze po diagonálách, apod.
+* Kód jsem též lehce přepracoval ohleně vykreslování herního pole, takže pro vykreslení používám stejnou funkci pro hledání figur, jako všude jinde v kódu
+* kód je ošetřen výjimkami
 
 ### Použitá probraná látka
 Jedním z mých cílů, je procvičit si použití co největšího objemu probrané látky, proto jsem udělal tento list:
@@ -24,14 +28,14 @@ Jedním z mých cílů, je procvičit si použití co největšího objemu probr
  * [X] POLYMORFISMUS - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-Polymorphism.aspx
  * [X] STATICKÉ TŘÍDY A ČLENY - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-Static.aspx
  * [X] ABSTRAKCE - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-Abstraction.aspx
- * [ ] ROZHRANÍ - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-Interface.aspx
+ * [X] ROZHRANÍ - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-Interface.aspx
  * [ ] PŘETÍŽENÍ OPERÁTORŮ - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-OperatorOverloading.aspx
  * [ ] STRUKTURA - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-Struct.aspx
  * [ ] ZÁZNAM - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-Record.aspx
  * [X] S.O.L.I.D. - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-SOLID.aspx
  * [ ] GERERIKA - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-Generics.aspx
  * [ ] KOLEKCE - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-Collection.aspx
- * [ ] SEZNAM - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-Col-List.aspx
+ * [X] SEZNAM - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-Col-List.aspx
  * [ ] SLOVNÍK - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-Dictionary.aspx
  * [ ] FRONTA - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-Queue.aspx
  * [ ] ZÁSOBNÍK - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-Stack.aspx

@@ -14,7 +14,7 @@
  * [X] S.O.L.I.D. - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-SOLID.aspx
  * [ ] GERERIKA - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-Generics.aspx
  * [ ] KOLEKCE - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-Collection.aspx
- * [ ] SEZNAM - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-Col-List.aspx
+ * [X] SEZNAM - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-Col-List.aspx
  * [ ] SLOVNÍK - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-Dictionary.aspx
  * [ ] FRONTA - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-Queue.aspx
  * [ ] ZÁSOBNÍK - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-Stack.aspx
@@ -45,11 +45,11 @@
 /* ======== TODO ========
  * logging the game moves into a text file - e4 e5, Nf3 f5, d4 Nf6, .. ..
  * allow the players to change their names
- * actually make the moves on the board
  * implement the mechanic of checks
  * en passant
  * casteling
  */
+
 using System;
 using System.Linq.Expressions;
 using System.Text.RegularExpressions;
@@ -76,12 +76,15 @@ abstract class ChessPiece
 class Pawn : ChessPiece, IMovable
 {
     public bool HasMoved { get; set; }
+    private ChessBoard chessBoard; // Instance variable
 
-    public Pawn(bool isWhite, int position)
+    public Pawn(bool isWhite, int position, ChessBoard chessBoard)
         : base(isWhite, position, isWhite ? 'P' : 'p')
     {
         HasMoved = false;
+        this.chessBoard = chessBoard; // Initialize the instance variable
     }
+
 
     public override bool IsValidMove(int newPosition)
     {
@@ -90,39 +93,64 @@ class Pawn : ChessPiece, IMovable
 
         if (IsWhite)
         {
+            ChessPiece? piece = chessBoard.GetPiece(newPosition);
             // Pawns can only move forward
             if (newPosition < Position)
                 return false;
 
             // Pawns can move one or two squares forward on their first move
             if (!HasMoved && rowDifference == 2 && colDifference == 0)
-                return true;
+                if (piece != null)
+                {
+                    return false;
+                }
+                else return true;
             else if (rowDifference == 1 && colDifference == 0)
-                return true;
+                if (piece != null)
+                {
+                    return false;
+                }
+                else return true;
 
             // Pawns can move diagonally to capture an opponent's piece
             if (rowDifference == 1 && colDifference == 1)
-                return true;
+            {
+                if (piece != null && piece.IsWhite != IsWhite && colDifference == 1) // Checking if the target position contains an opponent's piece and it's not in the same column
+                    return true;
+            }
         }
         else
         {
+            ChessPiece? piece = chessBoard.GetPiece(newPosition);
             // Pawns can only move backward
             if (newPosition > Position)
                 return false;
 
             // Pawns can move one or two squares backward on their first move
             if (!HasMoved && rowDifference == 2 && colDifference == 0)
-                return true;
+                if (piece != null)
+                {
+                    return false;
+                }
+                else return true;
             else if (rowDifference == 1 && colDifference == 0)
-                return true;
+                if (piece != null)
+                {
+                    return false;
+                }
+                else return true;
 
             // Pawns can move diagonally to capture an opponent's piece
             if (rowDifference == 1 && colDifference == 1)
-                return true;
+            {
+                if (piece != null && piece.IsWhite != IsWhite && colDifference == 1) // Checking if the target position contains an opponent's piece and it's not in the same column
+                    return true;
+            }
         }
 
         return false;
     }
+
 }
 
 class Queen : ChessPiece, IMovable
@@ -231,8 +259,12 @@ class ChessBoard
     {
         Pieces = new List<ChessPiece>();
     }
-}
 
+    public ChessPiece? GetPiece(int position)
+    {
+        return Pieces.Find(piece => piece.Position == position);
+    }
+}
 
 class Player
 {
@@ -282,13 +314,13 @@ class Program
         // Add white pawns
         for (int i = 8; i < 16; i++)
         {
-            ChessBoard.Pieces.Add(new Pawn(true, i));
+            ChessBoard.Pieces.Add(new Pawn(true, i, ChessBoard));
         }
 
         // Add black pawns
         for (int i = 48; i < 56; i++)
         {
-            ChessBoard.Pieces.Add(new Pawn(false, i));
+            ChessBoard.Pieces.Add(new Pawn(false, i, ChessBoard));
         }
 
 
@@ -297,11 +329,9 @@ class Program
             Console.WriteLine($"{piece.Symbol} - Position: {piece.Position}");
         }
 
-
         bool whiteToMove = true;
         while (true)
         {
-            //Console.WriteLine("There is: " + GetChessPieceOnSquare("c8", pawns, whiteKing, whiteQueen, whiteBishop1, whiteBishop2, whiteKnight1, whiteKnight2, whiteRook1, whiteRook2, blackKing, blackQueen, blackBishop1, blackBishop2, blackKnight1, blackKnight2, blackRook1, blackRook2)); 
             PrintChessBoard(ChessBoard);
             if (whiteToMove is true)
             {
@@ -317,7 +347,7 @@ class Program
     }
     static bool PlayerToMove(string name, int[] chessBoardPosition, ChessBoard chessBoard, bool whiteToMove)
     {
-        Console.WriteLine($"{name}, enter your move (e.g.: e7 e5): ");
+        Console.WriteLine($"{name}, enter your move (e.g.: e2 e4): ");
         try
         {
             string? input = Console.ReadLine();
@@ -326,8 +356,7 @@ class Program
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"An error occurred: {ex.Message}");
-            return false;
+            ThrowError(ex.Message); return false;
         }
     }
     // method that processes the move input of the player, converts the string into a position and checks if the position is valid, if not
@@ -335,6 +364,7 @@ class Program
     {
         try
         {
+            Console.ForegroundColor = ConsoleColor.Red;
             if (input == null) { throw new ArgumentException("Input cannot be null."); }
             string[] parts = input.Split(' ');
             if (parts.Length != 2) { throw new ArgumentException("Invalid input format. Expected format: 'startPosition endPosition'."); }
@@ -364,15 +394,17 @@ class Program
             {
                 throw new ArgumentException("Invalid end position.");
             }
-            
+            Console.ForegroundColor = ConsoleColor.Cyan;
             // Print the start and End position of the pieces:
+            Console.WriteLine("________________________________________");
+            Console.WriteLine("Info about the selected chess piece:");
             Console.WriteLine("Chess piece on start square: " + GetChessPieceOnSquare(ConvertChessNotationToSquareNumber(startPosition), chessBoard));
             Console.WriteLine("Chess piece on start square: " + GetChessPieceOnSquare(ConvertChessNotationToSquareNumber(endPosition), chessBoard));
 
             // Find the piece at the start position
-
-            ChessPiece piece = chessBoard.Pieces.Find(p => p.Position == startIndex);
+            ChessPiece? piece = chessBoard.Pieces.Find(p => p.Position == startIndex);
             Console.WriteLine(piece);
+            Console.WriteLine("________________________________________");
             if (piece != null && piece.IsWhite == whiteToMove)
             {
                 // Check if the piece has a valid move to the end position
@@ -380,24 +412,24 @@ class Program
                 {
                     // Move the piece to the end position
                     piece.Position = endIndex;
+                    Console.ForegroundColor = ConsoleColor.Green;
                     Console.WriteLine("The move was legal");
+                    Console.ForegroundColor = ConsoleColor.White;
                     return true;
                 }
-                else Console.WriteLine($"An error occurred: The move was illegal!");
-                return false;
+                else ThrowError("The move was illegal!");return false;
             }
-            else Console.WriteLine($"An error occurred: You canno't move the enemy player's pieces");
-            return false;
+            else ThrowError("An error occurred: You canno't move the enemy player's pieces!");  return false;
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"An error occurred: {ex.Message}");
-            return false;
+            ThrowError(ex.Message); return false;
         }
     }
     // method that prints out the chessboard
     static void PrintChessBoard(ChessBoard Chessboard)
     {
+        Console.ForegroundColor = ConsoleColor.White;
         Console.WriteLine("  ------------------------");
 
         for (int row = 1; row <= 8; row++)
@@ -454,5 +486,9 @@ class Program
         int rank = rankChar - '1';
 
         return rank * 8 + file;
+    }
+    public static void ThrowError(string message){
+        Console.ForegroundColor = ConsoleColor.Red;
+        Console.WriteLine($"An error occurred: " +message);
     }
 }

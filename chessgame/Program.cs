@@ -7,7 +7,7 @@
  * [X] POLYMORFISMUS - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-Polymorphism.aspx
  * [X] STATICKÉ TŘÍDY A ČLENY - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-Static.aspx
  * [X] ABSTRAKCE - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-Abstraction.aspx
- * [ ] ROZHRANÍ - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-Interface.aspx
+ * [X] ROZHRANÍ - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-Interface.aspx
  * [ ] PŘETÍŽENÍ OPERÁTORŮ - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-OperatorOverloading.aspx
  * [ ] STRUKTURA - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-Struct.aspx
  * [ ] ZÁZNAM - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-Record.aspx
@@ -54,6 +54,10 @@ using System;
 using System.Linq.Expressions;
 using System.Text.RegularExpressions;
 
+interface IMovable
+{
+    bool IsValidMove(int newPosition);
+}
 abstract class ChessPiece
 {
     public bool IsWhite { get; set; }
@@ -66,9 +70,10 @@ abstract class ChessPiece
         Position = position;
         Symbol = symbol;
     }
+    public abstract bool IsValidMove(int newPosition);
 }
 
-class Pawn : ChessPiece
+class Pawn : ChessPiece, IMovable
 {
     public bool HasMoved { get; set; }
 
@@ -78,7 +83,7 @@ class Pawn : ChessPiece
         HasMoved = false;
     }
 
-    public bool IsValidMove(int newPosition)
+    public override bool IsValidMove(int newPosition)
     {
         int rowDifference = Math.Abs((newPosition / 8) - (Position / 8));
         int colDifference = Math.Abs((newPosition % 8) - (Position % 8));
@@ -120,14 +125,14 @@ class Pawn : ChessPiece
     }
 }
 
-class Queen : ChessPiece
+class Queen : ChessPiece, IMovable
 {
     public Queen(bool isWhite, int position)
         : base(isWhite, position, isWhite ? 'Q' : 'q')
     {
     }
 
-    public bool IsValidMove(int newPosition)
+    public override bool IsValidMove(int newPosition)
     {
         int rowDifference = Math.Abs((newPosition / 8) - (Position / 8));
         int colDifference = Math.Abs((newPosition % 8) - (Position % 8));
@@ -137,7 +142,7 @@ class Queen : ChessPiece
     }
 }
 
-class King : ChessPiece
+class King : ChessPiece, IMovable
 {
     public bool HasMoved { get; set; }
 
@@ -147,7 +152,7 @@ class King : ChessPiece
         HasMoved = false;
     }
 
-    public bool IsValidMove(int newPosition)
+    public override bool IsValidMove(int newPosition)
     {
         int rowDifference = Math.Abs((newPosition / 8) - (Position / 8));
         int colDifference = Math.Abs((newPosition % 8) - (Position % 8));
@@ -166,7 +171,7 @@ class King : ChessPiece
     }
 }
 
-class Rook : ChessPiece
+class Rook : ChessPiece, IMovable
 {
     public bool HasMoved { get; set; }
 
@@ -176,7 +181,7 @@ class Rook : ChessPiece
         HasMoved = false;
     }
 
-    public bool IsValidMove(int newPosition)
+    public override bool IsValidMove(int newPosition)
     {
         // Check if the new position is on the same row or column
         int rowDifference = Math.Abs((newPosition / 8) - (Position / 8));
@@ -186,14 +191,14 @@ class Rook : ChessPiece
 }
 
 
-class Knight : ChessPiece
+class Knight : ChessPiece, IMovable
 {
     public Knight(bool isWhite, int position)
         : base(isWhite, position, isWhite ? 'N' : 'n')
     {
     }
 
-    public bool IsValidMove(int newPosition)
+    public override bool IsValidMove(int newPosition)
     {
         // Check if the new position is a valid knight move
         int rowDifference = Math.Abs((newPosition / 8) - (Position / 8));
@@ -203,14 +208,14 @@ class Knight : ChessPiece
     }
 }
 
-class Bishop : ChessPiece
+class Bishop : ChessPiece, IMovable
 {
     public Bishop(bool isWhite, int position) 
         : base(isWhite, position, isWhite ? 'B' : 'n')
     {
         Symbol = isWhite ? 'B' : 'b';
     }
-    public bool IsValidMove(int newPosition)
+    public override bool IsValidMove(int newPosition)
     {
         // Check if the new position is on the same diagonal
         int rowDifference = Math.Abs((newPosition / 8) - (Position / 8));
@@ -218,6 +223,16 @@ class Bishop : ChessPiece
         return rowDifference == colDifference;
     }
 }
+class ChessBoard
+{
+    public List<ChessPiece> Pieces { get; set; }
+
+    public ChessBoard()
+    {
+        Pieces = new List<ChessPiece>();
+    }
+}
+
 
 class Player
 {
@@ -230,7 +245,6 @@ class Player
         IsWhite = isWhite;
     }
 }
-
 class Program
 {
     public static void Main(string[] args)
@@ -241,72 +255,73 @@ class Program
         Player player1 = new("Player 1", true);
         Player player2 = new("Player 2", false);
 
-        int[] chessBoard = new int[64];
+        int[] chessBoardPosition = new int[64];
 
-        for (int i = 0; i < chessBoard.Length; i++)
+        // Create the chess board
+        ChessBoard ChessBoard = new ChessBoard();
+
+        // Add white pieces
+        ChessBoard.Pieces.Add(new King(true, 4));
+        ChessBoard.Pieces.Add(new Queen(true, 3));
+        ChessBoard.Pieces.Add(new Bishop(true, 2));
+        ChessBoard.Pieces.Add(new Bishop(true, 5));
+        ChessBoard.Pieces.Add(new Knight(true, 1));
+        ChessBoard.Pieces.Add(new Knight(true, 6));
+        ChessBoard.Pieces.Add(new Rook(true, 0));
+        ChessBoard.Pieces.Add(new Rook(true, 7));
+        // Add black pieces
+        ChessBoard.Pieces.Add(new King(false, 60));
+        ChessBoard.Pieces.Add(new Queen(false, 59));
+        ChessBoard.Pieces.Add(new Bishop(false, 58));
+        ChessBoard.Pieces.Add(new Bishop(false, 61));
+        ChessBoard.Pieces.Add(new Knight(false, 57));
+        ChessBoard.Pieces.Add(new Knight(false, 62));
+        ChessBoard.Pieces.Add(new Rook(false, 56));
+        ChessBoard.Pieces.Add(new Rook(false, 63));
+
+        // Add white pawns
+        for (int i = 8; i < 16; i++)
         {
-            chessBoard[i] = i;
-        }
-        Pawn[] pawns = new Pawn[16];
-
-        // Initialize white pieces
-        King whiteKing = new(true, 4);
-        Queen whiteQueen = new(true, 3);
-        Bishop whiteBishop1 = new(true, 2);
-        Bishop whiteBishop2 = new(true, 5);
-        Knight whiteKnight1 = new(true, 1);
-        Knight whiteKnight2 = new(true, 6);
-        Rook whiteRook1 = new(true, 0);
-        Rook whiteRook2 = new(true, 7);
-
-        // Initialize black pieces
-        King blackKing = new(false, 60);
-        Queen blackQueen = new(false, 59);
-        Bishop blackBishop1 = new(false, 58);
-        Bishop blackBishop2 = new(false, 61);
-        Knight blackKnight1 = new(false, 57);
-        Knight blackKnight2 = new(false, 62);
-        Rook blackRook1 = new(false, 56);
-        Rook blackRook2 = new(false, 63);
-
-        // Initialize white pawns in second row
-        for (int i = 0; i < 8; i++)
-        {
-            pawns[i] = new Pawn(true, i + 8);
+            ChessBoard.Pieces.Add(new Pawn(true, i));
         }
 
-        // Initialize black pawns in seventh row
-        for (int i = 0; i < 8; i++)
+        // Add black pawns
+        for (int i = 48; i < 56; i++)
         {
-            pawns[i + 8] = new Pawn(false, i + 48);
+            ChessBoard.Pieces.Add(new Pawn(false, i));
         }
 
+
+        foreach (ChessPiece piece in ChessBoard.Pieces)
+        {
+            Console.WriteLine($"{piece.Symbol} - Position: {piece.Position}");
+        }
 
 
         bool whiteToMove = true;
         while (true)
         {
             //Console.WriteLine("There is: " + GetChessPieceOnSquare("c8", pawns, whiteKing, whiteQueen, whiteBishop1, whiteBishop2, whiteKnight1, whiteKnight2, whiteRook1, whiteRook2, blackKing, blackQueen, blackBishop1, blackBishop2, blackKnight1, blackKnight2, blackRook1, blackRook2)); 
-            PrintChessBoard(chessBoard, pawns,whiteKing, whiteQueen, whiteBishop1, whiteBishop2,whiteKnight1,whiteKnight2,whiteRook1, whiteRook2,blackKing, blackQueen, blackBishop1,blackBishop2, blackKnight1, blackKnight2, blackRook1, blackRook2);
+            PrintChessBoard(ChessBoard);
             if (whiteToMove is true)
             {
-                bool moved = PlayerToMove(player1.Name, chessBoard);
+                bool moved = PlayerToMove(player1.Name, chessBoardPosition, ChessBoard, whiteToMove);
                 if (moved is true) { whiteToMove = false; }
             }
             else if (whiteToMove is false)
             {
-                bool moved = PlayerToMove(player2.Name, chessBoard);
+                bool moved = PlayerToMove(player2.Name, chessBoardPosition, ChessBoard, whiteToMove);
                 if (moved is true) { whiteToMove = true; }
             }
         }
     }
-    static bool PlayerToMove(string name, int[] chessboard)
+    static bool PlayerToMove(string name, int[] chessBoardPosition, ChessBoard chessBoard, bool whiteToMove)
     {
         Console.WriteLine($"{name}, enter your move (e.g.: e7 e5): ");
         try
         {
             string? input = Console.ReadLine();
-            if (processMoveInput(input, chessboard) is false) { return false; }
+            if (ProcessMoveInput(input, chessBoardPosition, chessBoard, whiteToMove) is false) { return false; }
             return true;
         }
         catch (Exception ex)
@@ -316,7 +331,7 @@ class Program
         }
     }
     // method that processes the move input of the player, converts the string into a position and checks if the position is valid, if not
-    static bool processMoveInput(string? input, int[] chessboard)
+    static bool ProcessMoveInput(string? input, int[] chessBoardPosition, ChessBoard chessBoard, bool whiteToMove)
     {
         try
         {
@@ -340,19 +355,39 @@ class Program
             int endRank = int.Parse(endPosition[1].ToString()) - 1;
             int endIndex = (endRank * 8) + endFile;
             // Check if start position is valid
-            if (startIndex < 0 || startIndex >= chessboard.Length)
+            if (startIndex < 0 || startIndex >= chessBoardPosition.Length)
             {
                 throw new ArgumentException("Invalid start position.");
             }
             // Check if end position is valid
-            if (endIndex < 0 || endIndex >= chessboard.Length)
+            if (endIndex < 0 || endIndex >= chessBoardPosition.Length)
             {
                 throw new ArgumentException("Invalid end position.");
             }
+            
+            // Print the start and End position of the pieces:
+            Console.WriteLine("Chess piece on start square: " + GetChessPieceOnSquare(ConvertChessNotationToSquareNumber(startPosition), chessBoard));
+            Console.WriteLine("Chess piece on start square: " + GetChessPieceOnSquare(ConvertChessNotationToSquareNumber(endPosition), chessBoard));
 
-            // TODO: Process the move
+            // Find the piece at the start position
 
-            return true;
+            ChessPiece piece = chessBoard.Pieces.Find(p => p.Position == startIndex);
+            Console.WriteLine(piece);
+            if (piece != null && piece.IsWhite == whiteToMove)
+            {
+                // Check if the piece has a valid move to the end position
+                if (piece.IsValidMove(endIndex))
+                {
+                    // Move the piece to the end position
+                    piece.Position = endIndex;
+                    Console.WriteLine("The move was legal");
+                    return true;
+                }
+                else Console.WriteLine($"An error occurred: The move was illegal!");
+                return false;
+            }
+            else Console.WriteLine($"An error occurred: You canno't move the enemy player's pieces");
+            return false;
         }
         catch (Exception ex)
         {
@@ -361,7 +396,7 @@ class Program
         }
     }
     // method that prints out the chessboard
-    static void PrintChessBoard(int[] chessBoard, Pawn[] pawns, King whiteKing, Queen whiteQueen, Bishop whiteBishop1, Bishop whiteBishop2, Knight whiteKnight1, Knight whiteKnight2, Rook whiteRook1, Rook whiteRook2, King blackKing, Queen blackQueen, Bishop blackBishop1, Bishop blackBishop2, Knight blackKnight1, Knight blackKnight2, Rook blackRook1, Rook blackRook2)
+    static void PrintChessBoard(ChessBoard Chessboard)
     {
         Console.WriteLine("  ------------------------");
 
@@ -373,7 +408,7 @@ class Program
                 int position = ((row - 1) * 8) + (col - 'A');
 
                 // Print the chess piece in the current square
-                Tuple<string, ConsoleColor> chessPiece = GetChessPieceOnSquare(position, pawns, whiteKing, whiteQueen, whiteBishop1, whiteBishop2, whiteKnight1, whiteKnight2, whiteRook1, whiteRook2, blackKing, blackQueen, blackBishop1, blackBishop2, blackKnight1, blackKnight2, blackRook1, blackRook2);
+                Tuple<string, ConsoleColor> chessPiece = GetChessPieceOnSquare(position, Chessboard);
                 Console.ForegroundColor = chessPiece.Item2;
                 Console.Write(" " + chessPiece.Item1 + " ");
                 Console.ForegroundColor = ConsoleColor.White;
@@ -387,27 +422,37 @@ class Program
     }
 
     // A method that returns the piece as a string and the color of the piece as ConsoleColor
-    static Tuple<string, ConsoleColor> GetChessPieceOnSquare(int position, Pawn[] pawns, King whiteKing, Queen whiteQueen, Bishop whiteBishop1, Bishop whiteBishop2, Knight whiteKnight1, Knight whiteKnight2, Rook whiteRook1, Rook whiteRook2, King blackKing, Queen blackQueen, Bishop blackBishop1, Bishop blackBishop2, Knight blackKnight1, Knight blackKnight2, Rook blackRook1, Rook blackRook2)
+    static Tuple<string, ConsoleColor> GetChessPieceOnSquare(int position, ChessBoard chessBoard)
     {
-        // Print the chess piece in the current square
-        if (whiteKing.Position == position) { return new Tuple<string, ConsoleColor>("K", ConsoleColor.White); }
-        else if (whiteQueen.Position == position) { return new Tuple<string, ConsoleColor>("Q", ConsoleColor.White); }
-        else if (whiteBishop1.Position == position || whiteBishop2.Position == position) { return new Tuple<string, ConsoleColor>("B", ConsoleColor.White); }
-        else if (whiteKnight1.Position == position || whiteKnight2.Position == position) { return new Tuple<string, ConsoleColor>("N", ConsoleColor.White); }
-        else if (whiteRook1.Position == position || whiteRook2.Position == position) { return new Tuple<string, ConsoleColor>("R", ConsoleColor.White); }
-        else
+        foreach (ChessPiece piece in chessBoard.Pieces)
         {
-            foreach (Pawn pawn in pawns)
+            if (piece.Position == position)
             {
-                if (pawn.Position == position) { return new Tuple<string, ConsoleColor>(pawn.IsWhite ? "P" : "p", pawn.IsWhite ? ConsoleColor.White : ConsoleColor.DarkGray); }
-            }
 
-            if (blackKing.Position == position) { return new Tuple<string, ConsoleColor>("k", ConsoleColor.DarkGray); }
-            else if (blackQueen.Position == position) { return new Tuple<string, ConsoleColor>("q", ConsoleColor.DarkGray); }
-            else if (blackBishop1.Position == position || blackBishop2.Position == position) { return new Tuple<string, ConsoleColor>("b", ConsoleColor.DarkGray); }
-            else if (blackKnight1.Position == position || blackKnight2.Position == position) { return new Tuple<string, ConsoleColor>("n", ConsoleColor.DarkGray); }
-            else if (blackRook1.Position == position || blackRook2.Position == position) { return new Tuple<string, ConsoleColor>("r", ConsoleColor.DarkGray); }
-            else { return new Tuple<string, ConsoleColor>(".", ConsoleColor.White); }
+                return new Tuple<string, ConsoleColor>(piece.Symbol.ToString(), piece.IsWhite ? ConsoleColor.White : ConsoleColor.DarkGray); ;
+            }
         }
+        return new Tuple<string, ConsoleColor>(".", ConsoleColor.White); ;
+    }
+
+    public static int ConvertChessNotationToSquareNumber(string chessNotation)
+    {
+        if (chessNotation.Length != 2)
+        {
+            throw new ArgumentException("Invalid chess notation. Expected two characters.");
+        }
+
+        char fileChar = char.ToLower(chessNotation[0]);
+        char rankChar = chessNotation[1];
+
+        if (fileChar < 'a' || fileChar > 'h' || rankChar < '1' || rankChar > '8')
+        {
+            throw new ArgumentException("Invalid chess notation. Expected a valid file (a-h) and rank (1-8).");
+        }
+
+        int file = fileChar - 'a';
+        int rank = rankChar - '1';
+
+        return rank * 8 + file;
     }
 }

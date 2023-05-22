@@ -1,0 +1,5 @@
+C:\Users\Matěj\Desktop\chess\chessgame.exe
+C:\Users\Matěj\Desktop\chess\chessgame.dll
+C:\Users\Matěj\Desktop\chess\chessgame.deps.json
+C:\Users\Matěj\Desktop\chess\chessgame.runtimeconfig.json
+C:\Users\Matěj\Desktop\chess\chessgame.pdb

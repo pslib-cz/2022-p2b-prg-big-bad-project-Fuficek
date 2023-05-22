@@ -76,7 +76,7 @@ abstract class ChessPiece
 class Pawn : ChessPiece, IMovable
 {
     public bool HasMoved { get; set; }
-    private ChessBoard chessBoard; // Instance variable
+    private readonly ChessBoard chessBoard; // Instance variable
 
     public Pawn(bool isWhite, int position, ChessBoard chessBoard)
         : base(isWhite, position, isWhite ? 'P' : 'p')
@@ -155,9 +155,12 @@ class Pawn : ChessPiece, IMovable
 
 class Queen : ChessPiece, IMovable
 {
-    public Queen(bool isWhite, int position)
+    private readonly ChessBoard chessBoard;
+
+    public Queen(bool isWhite, int position, ChessBoard chessBoard)
         : base(isWhite, position, isWhite ? 'Q' : 'q')
     {
+        this.chessBoard = chessBoard;
     }
 
     public override bool IsValidMove(int newPosition)
@@ -166,18 +169,49 @@ class Queen : ChessPiece, IMovable
         int colDifference = Math.Abs((newPosition % 8) - (Position % 8));
 
         // Queens can move like a bishop or a rook
-        return rowDifference == colDifference || (rowDifference == 0 || colDifference == 0);
+        if (rowDifference == colDifference || (rowDifference == 0 || colDifference == 0))
+        {
+            // Check if any piece is blocking the path
+            int rowDirection = (newPosition / 8 > Position / 8) ? 1 : -1;
+            int colDirection = (newPosition % 8 > Position % 8) ? 1 : -1;
+
+            int currentRow = Position / 8 + rowDirection;
+            int currentCol = Position % 8 + colDirection;
+
+            while (currentRow != newPosition / 8 || currentCol != newPosition % 8)
+            {
+                ChessPiece? piece = chessBoard.GetPiece(currentRow * 8 + currentCol);
+                if (piece != null)
+                {
+                    Console.WriteLine($"Move blocked by {piece.Symbol}");
+                    return false;
+                }
+
+                currentRow += rowDirection;
+                currentCol += colDirection;
+            }
+
+            return true;
+        }
+
+        return false;
     }
 }
+
 
 class King : ChessPiece, IMovable
 {
     public bool HasMoved { get; set; }
+    public bool CanCastle { get; set; } = true;
 
-    public King(bool isWhite, int position)
+    private readonly ChessBoard chessBoard;
+
+
+    public King(bool isWhite, int position, ChessBoard chessBoard)
         : base(isWhite, position, isWhite ? 'K' : 'k')
     {
         HasMoved = false;
+        this.chessBoard = chessBoard;
     }
 
     public override bool IsValidMove(int newPosition)
@@ -191,22 +225,42 @@ class King : ChessPiece, IMovable
 
         // Kings can castle with a rook if they haven't moved
         if (!HasMoved && newPosition == Position + 2 && colDifference == 2)
-            return true;
+        {
+            // Check if the rook is available for castling
+            Rook? rightRook = chessBoard.GetRightRook(IsWhite);
+            if (rightRook != null && rightRook.CanCastle)
+            {
+                return true;
+            }
+        }
+
         if (!HasMoved && newPosition == Position - 2 && colDifference == 2)
-            return true;
+        {
+            // Check if the rook is available for castling
+            Rook? leftRook = chessBoard.GetLeftRook(IsWhite);
+            if (leftRook != null && leftRook.CanCastle)
+            {
+                return true;
+            }
+        }
 
         return false;
     }
+
 }
 
 class Rook : ChessPiece, IMovable
 {
     public bool HasMoved { get; set; }
+    private readonly ChessBoard chessBoard;
+    public bool CanCastle { get; set; } = true;
 
-    public Rook(bool isWhite, int position)
+
+    public Rook(bool isWhite, int position, ChessBoard chessBoard)
         : base(isWhite, position, isWhite ? 'R' : 'r')
     {
         HasMoved = false;
+        this.chessBoard = chessBoard;
     }
 
     public override bool IsValidMove(int newPosition)
@@ -214,8 +268,30 @@ class Rook : ChessPiece, IMovable
         // Check if the new position is on the same row or column
         int rowDifference = Math.Abs((newPosition / 8) - (Position / 8));
         int colDifference = Math.Abs((newPosition % 8) - (Position % 8));
-        return rowDifference == 0 || colDifference == 0;
+
+        if (rowDifference == 0 || colDifference == 0)
+        {
+            int step = rowDifference > 0 ? 8 : 1; // Define the step size based on the direction
+
+            // Check for any pieces in the path
+            int currentPos = Position + step;
+            while (currentPos != newPosition)
+            {
+                ChessPiece? piece = chessBoard.GetPiece(currentPos);
+                if (piece != null)
+                {
+                    // There is a piece in the path, invalid move
+                    return false;
+                }
+                currentPos += step;
+            }
+
+            return true;
+        }
+
+        return false;
     }
+
 }
 
 
@@ -238,18 +314,44 @@ class Knight : ChessPiece, IMovable
 
 class Bishop : ChessPiece, IMovable
 {
-    public Bishop(bool isWhite, int position) 
+    private readonly ChessBoard chessBoard;
+    public Bishop(bool isWhite, int position, ChessBoard chessBoard) 
         : base(isWhite, position, isWhite ? 'B' : 'n')
     {
+        this.chessBoard = chessBoard;
         Symbol = isWhite ? 'B' : 'b';
     }
     public override bool IsValidMove(int newPosition)
     {
-        // Check if the new position is on the same diagonal
         int rowDifference = Math.Abs((newPosition / 8) - (Position / 8));
         int colDifference = Math.Abs((newPosition % 8) - (Position % 8));
-        return rowDifference == colDifference;
+
+        // Check if the new position is on the same diagonal
+        if (rowDifference == colDifference)
+        {
+            int rowDirection = (newPosition / 8) > (Position / 8) ? 1 : -1;
+            int colDirection = (newPosition % 8) > (Position % 8) ? 1 : -1;
+
+            int row = Position / 8 + rowDirection;
+            int col = Position % 8 + colDirection;
+
+            while (row != newPosition / 8 && col != newPosition % 8)
+            {
+                ChessPiece? piece = chessBoard.GetPiece(row * 8 + col);
+                if (piece != null)
+                    return false;
+
+                row += rowDirection;
+                col += colDirection;
+            }
+
+            ChessPiece? destinationPiece = chessBoard.GetPiece(newPosition);
+            return destinationPiece == null || destinationPiece.IsWhite != IsWhite;
+        }
+
+        return false;
     }
+
 }
 class ChessBoard
 {
@@ -258,6 +360,64 @@ class ChessBoard
     public ChessBoard()
     {
         Pieces = new List<ChessPiece>();
+    }
+    public Rook? GetRightRook(bool isWhite)
+    {
+        foreach (ChessPiece? piece in Pieces)
+        {
+            if (piece is Rook rook)
+            {
+                return rook;
+            }
+        }
+        return null;
+    }
+
+    public Rook? GetLeftRook(bool isWhite)
+    {
+        foreach (ChessPiece? piece in Pieces)
+        {
+            if (piece is Rook rook)
+            {
+                return rook;
+            }
+        }
+        return null;
+    }
+    public bool MovePiece(int fromPosition, int toPosition)
+    {
+        ChessPiece? startPiece = GetPiece(fromPosition);
+        ChessPiece? endPiece = GetPiece(toPosition);
+
+        if (startPiece != null && startPiece.IsValidMove(toPosition))
+        {
+            // Perform the castling move
+            if (startPiece is King king && king.CanCastle && Math.Abs(toPosition - fromPosition) == 2)
+            {
+                
+                king.HasMoved = true;
+                king.CanCastle = false;
+            }
+
+            // Update the piece position
+            // Remove the end piece if it exists
+            if (endPiece != null)
+            {
+                Console.WriteLine(endPiece + " was captured");
+                Pieces.Remove(endPiece);
+            }
+            // Move the piece to the end position
+            startPiece.Position = toPosition;
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("The move was legal");
+            Console.ForegroundColor = ConsoleColor.White;
+            // Perform other necessary actions
+            // ...
+
+            return true;
+        }
+
+        return false;
     }
 
     public ChessPiece? GetPiece(int position)
@@ -279,7 +439,7 @@ class Player
 }
 class Program
 {
-    public static void Main(string[] args)
+    public static void Main()
     {
         // Set console encoding to UTF-8
         Console.OutputEncoding = System.Text.Encoding.UTF8;
@@ -290,26 +450,26 @@ class Program
         int[] chessBoardPosition = new int[64];
 
         // Create the chess board
-        ChessBoard ChessBoard = new ChessBoard();
+        ChessBoard ChessBoard = new();
 
         // Add white pieces
-        ChessBoard.Pieces.Add(new King(true, 4));
-        ChessBoard.Pieces.Add(new Queen(true, 3));
-        ChessBoard.Pieces.Add(new Bishop(true, 2));
-        ChessBoard.Pieces.Add(new Bishop(true, 5));
+        ChessBoard.Pieces.Add(new King(true, 4, ChessBoard));
+        ChessBoard.Pieces.Add(new Queen(true, 3, ChessBoard));
+        ChessBoard.Pieces.Add(new Bishop(true, 2, ChessBoard));
+        ChessBoard.Pieces.Add(new Bishop(true, 5, ChessBoard));
         ChessBoard.Pieces.Add(new Knight(true, 1));
         ChessBoard.Pieces.Add(new Knight(true, 6));
-        ChessBoard.Pieces.Add(new Rook(true, 0));
-        ChessBoard.Pieces.Add(new Rook(true, 7));
+        ChessBoard.Pieces.Add(new Rook(true, 0, ChessBoard));
+        ChessBoard.Pieces.Add(new Rook(true, 7, ChessBoard));
         // Add black pieces
-        ChessBoard.Pieces.Add(new King(false, 60));
-        ChessBoard.Pieces.Add(new Queen(false, 59));
-        ChessBoard.Pieces.Add(new Bishop(false, 58));
-        ChessBoard.Pieces.Add(new Bishop(false, 61));
+        ChessBoard.Pieces.Add(new King(false, 60, ChessBoard));
+        ChessBoard.Pieces.Add(new Queen(false, 59, ChessBoard));
+        ChessBoard.Pieces.Add(new Bishop(false, 58, ChessBoard));
+        ChessBoard.Pieces.Add(new Bishop(false, 61, ChessBoard));
         ChessBoard.Pieces.Add(new Knight(false, 57));
         ChessBoard.Pieces.Add(new Knight(false, 62));
-        ChessBoard.Pieces.Add(new Rook(false, 56));
-        ChessBoard.Pieces.Add(new Rook(false, 63));
+        ChessBoard.Pieces.Add(new Rook(false, 56, ChessBoard));
+        ChessBoard.Pieces.Add(new Rook(false, 63, ChessBoard));
 
         // Add white pawns
         for (int i = 8; i < 16; i++)
@@ -323,11 +483,13 @@ class Program
             ChessBoard.Pieces.Add(new Pawn(false, i, ChessBoard));
         }
 
-
+        /* 
+        // Prints out the position of all the pieces on the chessboard
         foreach (ChessPiece piece in ChessBoard.Pieces)
         {
             Console.WriteLine($"{piece.Symbol} - Position: {piece.Position}");
         }
+        */
 
         bool whiteToMove = true;
         while (true)
@@ -370,20 +532,24 @@ class Program
             if (parts.Length != 2) { throw new ArgumentException("Invalid input format. Expected format: 'startPosition endPosition'."); }
             string startPosition = parts[0].Trim();
             string endPosition = parts[1].Trim();
+
             // Use regular expressions to validate the positions
             string pattern = @"^[a-h][1-8]$";
             if (!Regex.IsMatch(startPosition, pattern) || !Regex.IsMatch(endPosition, pattern))
             {
                 throw new ArgumentException("Invalid input format. Expected format: 'rank'+'file', e.g. 'e4'.");
             }
+
             // Parse start position
             int startFile = char.ToUpper(startPosition[0]) - 'A';
             int startRank = int.Parse(startPosition[1].ToString()) - 1;
             int startIndex = (startRank * 8) + startFile;
+
             // Parse end position
             int endFile = char.ToUpper(endPosition[0]) - 'A';
             int endRank = int.Parse(endPosition[1].ToString()) - 1;
             int endIndex = (endRank * 8) + endFile;
+
             // Check if start position is valid
             if (startIndex < 0 || startIndex >= chessBoardPosition.Length)
             {
@@ -394,27 +560,25 @@ class Program
             {
                 throw new ArgumentException("Invalid end position.");
             }
+
+            // Find the pieces
+            ChessPiece? startPiece = chessBoard.Pieces.Find(p => p.Position == startIndex);
+            ChessPiece? endPiece = chessBoard.Pieces.Find(p => p.Position == endIndex);
             Console.ForegroundColor = ConsoleColor.Cyan;
+
             // Print the start and End position of the pieces:
             Console.WriteLine("________________________________________");
             Console.WriteLine("Info about the selected chess piece:");
-            Console.WriteLine("Chess piece on start square: " + GetChessPieceOnSquare(ConvertChessNotationToSquareNumber(startPosition), chessBoard));
-            Console.WriteLine("Chess piece on start square: " + GetChessPieceOnSquare(ConvertChessNotationToSquareNumber(endPosition), chessBoard));
+            Console.WriteLine("Chess piece on start square: " + startPiece);
+            Console.WriteLine("Chess piece on end square: " + endPiece);
 
-            // Find the piece at the start position
-            ChessPiece? piece = chessBoard.Pieces.Find(p => p.Position == startIndex);
-            Console.WriteLine(piece);
             Console.WriteLine("________________________________________");
-            if (piece != null && piece.IsWhite == whiteToMove)
+            if (startPiece != null && startPiece.IsWhite == whiteToMove)
             {
                 // Check if the piece has a valid move to the end position
-                if (piece.IsValidMove(endIndex))
+                if (startPiece.IsValidMove(endIndex))
                 {
-                    // Move the piece to the end position
-                    piece.Position = endIndex;
-                    Console.ForegroundColor = ConsoleColor.Green;
-                    Console.WriteLine("The move was legal");
-                    Console.ForegroundColor = ConsoleColor.White;
+                    chessBoard.MovePiece(startIndex, endIndex);
                     return true;
                 }
                 else ThrowError("The move was illegal!");return false;

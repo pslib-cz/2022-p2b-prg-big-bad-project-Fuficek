@@ -17,9 +17,13 @@ Jedná se o základní zobrazování šachovnice a většina času byla investov
 * Zprovoznil jsem pohyb jednotlivých figurek na poli společně se základní kontrolou legálních tahů, napříkald jezdci se hýbou pouze po Lkách, střelci pouze po diagonálách, apod.
 * Kód jsem též lehce přepracoval ohleně vykreslování herního pole, takže pro vykreslení používám stejnou funkci pro hledání figur, jako všude jinde v kódu
 * kód je ošetřen výjimkami
+## Commit 3 - Update 26.5.2023
+* TRVALO MI 6 DNÍ (večerů) IMPLEMENTOVAT POHYB KRÁLOVNY A PĚŠÁKŮ
+* stále nefunguje rošáda ani en passant, ale na to se asi vykašlu, protože musím dělat jiné projekty do školy
+* zatím jsem strávil na tomto projektu cca 28hodin, a už si myslím že to stačí na takto komplikované téma
 
 ### Použitá probraná látka
-Jedním z mých cílů, je procvičit si použití co největšího objemu probrané látky, proto jsem udělal tento list:
+Jedním z mých cílů, je procvičit si použití co největšího objemu probrané látky (i když mnoho z ní nemá využití v mém projektu), proto jsem udělal tento list:
  * [X] POLE - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-Array.aspx
  * [X] TŘÍDY A OBJEKTY - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-Class.aspx
  * [X] VÝJIMKY - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-Exception.aspx
@@ -40,7 +44,7 @@ Jedním z mých cílů, je procvičit si použití co největšího objemu probr
  * [ ] FRONTA - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-Queue.aspx
  * [ ] ZÁSOBNÍK - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-Stack.aspx
  * [ ] DELEGÁTY - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-Delegates.aspx
- * [ ] ROZŠIŘUJÍCÍ METODY - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-ExtensionMethods.aspx
+ * [X] ROZŠIŘUJÍCÍ METODY - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-ExtensionMethods.aspx
  * [ ] LINQ - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-LINQ.aspx
  * [ ] DATUM A ČAS - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-DateTime.aspx
  * [ ] STOPKY - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-Stopwatch.aspx

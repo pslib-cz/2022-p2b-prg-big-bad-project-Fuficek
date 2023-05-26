@@ -155,12 +155,12 @@ class Pawn : ChessPiece, IMovable
 
 class Queen : ChessPiece, IMovable
 {
-    private readonly ChessBoard chessBoard;
+    private readonly ChessBoard chessBoard; // Instance variable
 
     public Queen(bool isWhite, int position, ChessBoard chessBoard)
         : base(isWhite, position, isWhite ? 'Q' : 'q')
     {
-        this.chessBoard = chessBoard;
+        this.chessBoard = chessBoard; // Initialize the instance variable
     }
 
     public override bool IsValidMove(int newPosition)
@@ -168,35 +168,34 @@ class Queen : ChessPiece, IMovable
         int rowDifference = Math.Abs((newPosition / 8) - (Position / 8));
         int colDifference = Math.Abs((newPosition % 8) - (Position % 8));
 
-        // Queens can move like a bishop or a rook
-        if (rowDifference == colDifference || (rowDifference == 0 || colDifference == 0))
+        // Queens can move in rows, columns, and diagonals
+        if (rowDifference == 0 || colDifference == 0 || rowDifference == colDifference)
         {
-            // Check if any piece is blocking the path
-            int rowDirection = (newPosition / 8 > Position / 8) ? 1 : -1;
-            int colDirection = (newPosition % 8 > Position % 8) ? 1 : -1;
+            int rowDirection = Math.Sign(newPosition / 8 - Position / 8);
+            int colDirection = Math.Sign(newPosition % 8 - Position % 8);
 
-            int currentRow = Position / 8 + rowDirection;
-            int currentCol = Position % 8 + colDirection;
+            int row = Position / 8 + rowDirection;
+            int col = Position % 8 + colDirection;
 
-            while (currentRow != newPosition / 8 || currentCol != newPosition % 8)
+            while (row != newPosition / 8 || col != newPosition % 8)
             {
-                ChessPiece? piece = chessBoard.GetPiece(currentRow * 8 + currentCol);
+                ChessPiece? piece = chessBoard.GetPiece(row * 8 + col);
                 if (piece != null)
                 {
-                    Console.WriteLine($"Move blocked by {piece.Symbol}");
+                    // A piece is blocking the queen's path
                     return false;
                 }
 
-                currentRow += rowDirection;
-                currentCol += colDirection;
+                row += rowDirection;
+                col += colDirection;
             }
-
             return true;
         }
 
         return false;
     }
 }
+
 
 
 class King : ChessPiece, IMovable
@@ -399,7 +398,6 @@ class ChessBoard
                 king.CanCastle = false;
             }
 
-            // Update the piece position
             // Remove the end piece if it exists
             if (endPiece != null)
             {
@@ -412,11 +410,11 @@ class ChessBoard
             Console.WriteLine("The move was legal");
             Console.ForegroundColor = ConsoleColor.White;
             // Perform other necessary actions
-            // ...
 
+            Console.WriteLine("IIIIIII");
             return true;
         }
-
+        Console.WriteLine("oOOOooO");
         return false;
     }
 

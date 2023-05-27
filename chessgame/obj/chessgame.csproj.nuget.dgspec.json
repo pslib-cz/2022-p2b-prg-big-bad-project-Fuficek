@@ -1,15 +1,15 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Matěj\\Source\\Repos\\2022-p2b-prg-big-bad-project-Fuficek\\chessgame\\chessgame.csproj": {}
+    "C:\\Users\\Matěj\\source\\repos\\2022-p2b-prg-big-bad-project-Fuficek\\chessgame\\chessgame.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Matěj\\Source\\Repos\\2022-p2b-prg-big-bad-project-Fuficek\\chessgame\\chessgame.csproj": {
+    "C:\\Users\\Matěj\\source\\repos\\2022-p2b-prg-big-bad-project-Fuficek\\chessgame\\chessgame.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Matěj\\Source\\Repos\\2022-p2b-prg-big-bad-project-Fuficek\\chessgame\\chessgame.csproj",
+        "projectUniqueName": "C:\\Users\\Matěj\\source\\repos\\2022-p2b-prg-big-bad-project-Fuficek\\chessgame\\chessgame.csproj",
         "projectName": "chessgame",
-        "projectPath": "C:\\Users\\Matěj\\Source\\Repos\\2022-p2b-prg-big-bad-project-Fuficek\\chessgame\\chessgame.csproj",
+        "projectPath": "C:\\Users\\Matěj\\source\\repos\\2022-p2b-prg-big-bad-project-Fuficek\\chessgame\\chessgame.csproj",
         "packagesPath": "C:\\Users\\Matěj\\.nuget\\packages\\",
         "outputPath": "C:\\Users\\Matěj\\Source\\Repos\\2022-p2b-prg-big-bad-project-Fuficek\\chessgame\\obj\\",
         "projectStyle": "PackageReference",

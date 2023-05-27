@@ -220,31 +220,54 @@ class King : ChessPiece, IMovable
 
         // Kings can move one square in any direction
         if ((rowDifference == 1 && colDifference == 1) || (rowDifference == 1 && colDifference == 0) || (rowDifference == 0 && colDifference == 1))
+        {
             return true;
+        }
 
-        // Kings can castle with a rook if they haven't moved
-        if (!HasMoved && newPosition == Position + 2 && colDifference == 2)
+        // Check for castling
+        if (colDifference == 2 && newPosition / 8 == Position / 8)
         {
-            // Check if the rook is available for castling
-            Rook? rightRook = chessBoard.GetRightRook(IsWhite);
-            if (rightRook != null && rightRook.CanCastle)
+            // Check if the rook is present in the correct position
+            int rookPosition;
+            int rookNewPosition;
+            int rookColumn;
+            if (newPosition % 8 > Position % 8)
             {
+                // King-side castling
+                rookPosition = (Position / 8) * 8 + 7;
+                rookNewPosition = rookPosition - 2;
+                rookColumn = 7;
+                Console.WriteLine("ks check");
+            }
+            else
+            {
+                // Queen-side castling
+                rookPosition = (Position / 8) * 8;
+                rookNewPosition = rookPosition + 3;
+                rookColumn = 0;
+                Console.WriteLine("qs check");
+            }
+            Console.WriteLine(rookPosition);
+            
+            ChessPiece? rook = chessBoard.GetPiece(rookPosition);
+            if (rook is Rook && !((Rook)rook).HasMoved && rook.Position == rookPosition && rook.Position / 8 == newPosition / 8 && rook.Position % 8 == rookColumn)
+            {
+                // Check if there are no pieces between the king and rook
+                int step = newPosition > Position ? 1 : -1;
+                for (int column = Position % 8 + step; column != rookColumn; column += step)
+                {
+                    if (chessBoard.GetPiece(Position / 8 * 8 + column) != null)
+                    {
+                        return false;
+                    }
+                }
+                rook.Position = rookNewPosition;
                 return true;
             }
         }
-
-        if (!HasMoved && newPosition == Position - 2 && colDifference == 2)
-        {
-            // Check if the rook is available for castling
-            Rook? leftRook = chessBoard.GetLeftRook(IsWhite);
-            if (leftRook != null && leftRook.CanCastle)
-            {
-                return true;
-            }
-        }
-
         return false;
     }
+
 
 }
 
@@ -360,44 +383,13 @@ class ChessBoard
     {
         Pieces = new List<ChessPiece>();
     }
-    public Rook? GetRightRook(bool isWhite)
-    {
-        foreach (ChessPiece? piece in Pieces)
-        {
-            if (piece is Rook rook)
-            {
-                return rook;
-            }
-        }
-        return null;
-    }
-
-    public Rook? GetLeftRook(bool isWhite)
-    {
-        foreach (ChessPiece? piece in Pieces)
-        {
-            if (piece is Rook rook)
-            {
-                return rook;
-            }
-        }
-        return null;
-    }
     public bool MovePiece(int fromPosition, int toPosition)
     {
         ChessPiece? startPiece = GetPiece(fromPosition);
         ChessPiece? endPiece = GetPiece(toPosition);
 
-        if (startPiece != null && startPiece.IsValidMove(toPosition))
+        if (startPiece != null)
         {
-            // Perform the castling move
-            if (startPiece is King king && king.CanCastle && Math.Abs(toPosition - fromPosition) == 2)
-            {
-                
-                king.HasMoved = true;
-                king.CanCastle = false;
-            }
-
             // Remove the end piece if it exists
             if (endPiece != null)
             {
@@ -409,12 +401,9 @@ class ChessBoard
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("The move was legal");
             Console.ForegroundColor = ConsoleColor.White;
-            // Perform other necessary actions
 
-            Console.WriteLine("IIIIIII");
             return true;
         }
-        Console.WriteLine("oOOOooO");
         return false;
     }
 

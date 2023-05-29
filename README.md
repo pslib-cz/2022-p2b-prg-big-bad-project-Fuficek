@@ -7,6 +7,12 @@ https://github.com/Fuficek/game-chess
 
 příště budu commitovat sem.
 
+Game Rules //TODO
+
+https://en.wikipedia.org/wiki/Algebraic_notation_(chess) - Board repesentation
+https://en.mimi.hu/chess/long_algebraic_notation.html - Moves
+
+
 
 ## Commit 1 - Update 14.5.2023
 * Jelikož mi byla zamítnuta verze používající windows forms pro generování GUI, byl jsem proto nucen předělat celou hru do konzole. V prvním commitu je hlavní práce za víkend *12.-14.5.2023.*
@@ -17,10 +23,15 @@ Jedná se o základní zobrazování šachovnice a většina času byla investov
 * Zprovoznil jsem pohyb jednotlivých figurek na poli společně se základní kontrolou legálních tahů, napříkald jezdci se hýbou pouze po Lkách, střelci pouze po diagonálách, apod.
 * Kód jsem též lehce přepracoval ohleně vykreslování herního pole, takže pro vykreslení používám stejnou funkci pro hledání figur, jako všude jinde v kódu
 * kód je ošetřen výjimkami
+
 ## Commit 3 - Update 26.5.2023
 * TRVALO MI 6 DNÍ (večerů) IMPLEMENTOVAT POHYB KRÁLOVNY A PĚŠÁKŮ
 * stále nefunguje rošáda ani en passant, ale na to se asi vykašlu, protože musím dělat jiné projekty do školy
 * zatím jsem strávil na tomto projektu cca 28hodin, a už si myslím že to stačí na takto komplikované téma
+
+## Commit 4 - Update 27.5.2023
+* Rošáda je plně funkční pro oba hráče na obě strany a tady asi zakončím vývoj herní mechaniky a budu se soustředit na projekt na weby (vůbec se mi do toho nechce)
+* kod je v této fázi plně funkční a ošetřen výjimkami, vykreslovací mechanika, ověřování legálních tahů atd, je plně funkční a nově i bez stackoverflow errorů, které jsem kvůli rekurzi funkcí řešil velmi často. Stačí mi pouze napsat herní pravidla a ukládání aktuální pozice do souboru, pravděpodobně se vykašlu ne generování <a href="https://en.wikipedia.org/wiki/Forsyth%E2%80%93Edwards_Notation">FEN</a> stringů, což byl původní plán, jenže jsem neimplementoval mechaniku EN Passant, tak nemohu tuto metodu použít. Na en passantu jsem pracoval, ale kvůli časové tísni si myslím že bych pak projekt nedokončil.
 
 ### Použitá probraná látka
 Jedním z mých cílů, je procvičit si použití co největšího objemu probrané látky (i když mnoho z ní nemá využití v mém projektu), proto jsem udělal tento list:

@@ -2,17 +2,12 @@
 
 
 # CHESS
-Jelikož během praxí nebudu mít tolik času na dělání tohoto projektu, začal jsem na něm již před týdnem dělat. Repozitář jsem si již vytvořil:
-https://github.com/Fuficek/game-chess
-
-příště budu commitovat sem.
-
-Game Rules //TODO
-
-https://en.wikipedia.org/wiki/Algebraic_notation_(chess) - Board repesentation
-https://en.mimi.hu/chess/long_algebraic_notation.html - Moves
-
-
+Nejedná se o kompletní šachy, ale verzi šachů bez en passantu a metody šachu, ta je na kontrole uživatele. Program respektuje základní pravidla šachů pro tahy figur, a ověřuje jejich pravdivost.
+## Jak hrát?
+* Hra má velmi intuitivní ovládání, je pro 2 hráče kteří se střídají na tahu. 
+* Zápis pohybu figur je pomocí <a href="https://en.mimi.hu/chess/long_algebraic_notation.html - Moves">LONG ALGEBRAIC NOTATION</a>. 
+* Program vás při zadání špatného inputu vyzve pro opakování tahu. 
+* Hra končí jakmile je sebrána figurka krále jednoho z hráčů, ten, jehož král zůstává je výhercem.
 
 ## Commit 1 - Update 14.5.2023
 * Jelikož mi byla zamítnuta verze používající windows forms pro generování GUI, byl jsem proto nucen předělat celou hru do konzole. V prvním commitu je hlavní práce za víkend *12.-14.5.2023.*
@@ -32,6 +27,11 @@ Jedná se o základní zobrazování šachovnice a většina času byla investov
 ## Commit 4 - Update 27.5.2023
 * Rošáda je plně funkční pro oba hráče na obě strany a tady asi zakončím vývoj herní mechaniky a budu se soustředit na projekt na weby (vůbec se mi do toho nechce)
 * kod je v této fázi plně funkční a ošetřen výjimkami, vykreslovací mechanika, ověřování legálních tahů atd, je plně funkční a nově i bez stackoverflow errorů, které jsem kvůli rekurzi funkcí řešil velmi často. Stačí mi pouze napsat herní pravidla a ukládání aktuální pozice do souboru, pravděpodobně se vykašlu ne generování <a href="https://en.wikipedia.org/wiki/Forsyth%E2%80%93Edwards_Notation">FEN</a> stringů, což byl původní plán, jenže jsem neimplementoval mechaniku EN Passant, tak nemohu tuto metodu použít. Na en passantu jsem pracoval, ale kvůli časové tísni si myslím že bych pak projekt nedokončil.
+
+## Commit 5 - Update 3.6.2023
+* Hra je plně funkční, nejedná se o kompletní šachy, ale verzi šachů bez en passantu a metody šachu, ta je na kontrole uživatele. 
+* Byla přidána funkce výpisu finální pozice pomocí <a href="https://en.mimi.hu/chess/long_algebraic_notation.html - Moves">LONG ALGEBRAIC NOTATION</a>
+
 
 ### Použitá probraná látka
 Jedním z mých cílů, je procvičit si použití co největšího objemu probrané látky (i když mnoho z ní nemá využití v mém projektu), proto jsem udělal tento list:
@@ -62,11 +62,11 @@ Jedním z mých cílů, je procvičit si použití co největšího objemu probr
  * [ ] TESTOVÁNÍ - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-Testing.aspx
  * [ ] JEDNOTKOVÉ TESTOVÁNÍ - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-UnitTesting.aspx
  * [ ] BENCHMARK - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-Benchmark.aspx
- * [ ] ŘETĚZCE - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-String.aspx
+ * [X] ŘETĚZCE - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-String.aspx
  * [X] REGEX - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-RegularExpression.aspx
- * [ ] SOUBOROVÝ SYSTÉM - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-FileSystem.aspx
+ * [X] SOUBOROVÝ SYSTÉM - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-FileSystem.aspx
  * [ ] ARGS - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-CommandLineArgs.aspx
- * [ ] TEXTOVÉ SOUBORY - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-TextFile.aspx
+ * [X] TEXTOVÉ SOUBORY - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-TextFile.aspx
  * [ ] BINÁRNÍ SOUBORY - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-BinaryFile.aspx
  * [ ] ŠIFROVÁNÍ - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-Ciphers.aspx
  * [ ] AES - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-AES.aspx

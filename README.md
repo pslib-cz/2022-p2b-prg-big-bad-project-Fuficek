@@ -2,7 +2,7 @@
 
 
 # CHESS
-Nejedná se o kompletní šachy, ale verzi šachů bez en passantu a metody šachu, ta je na kontrole uživatele. Program respektuje základní pravidla šachů pro tahy figur, a ověřuje jejich pravdivost.
+**Nejedná se o kompletní šachy, ale verzi šachů bez en passantu a metody šachu, ta je na kontrole uživatele. Program respektuje základní pravidla šachů pro tahy figur, a ověřuje jejich pravdivost.**
 ### Jak hrát?
 * Hra má velmi intuitivní ovládání, je pro 2 hráče kteří se střídají na tahu. 
 * Zápis pohybu figur je pomocí <a href="https://en.mimi.hu/chess/long_algebraic_notation.html - Moves">LONG ALGEBRAIC NOTATION</a>. 

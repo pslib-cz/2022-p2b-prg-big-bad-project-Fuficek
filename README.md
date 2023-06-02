@@ -26,7 +26,7 @@ Jedná se o základní zobrazování šachovnice a většina času byla investov
 
 ## Commit 4 - Update 27.5.2023
 * Rošáda je plně funkční pro oba hráče na obě strany a tady asi zakončím vývoj herní mechaniky a budu se soustředit na projekt na weby (vůbec se mi do toho nechce)
-* kod je v této fázi plně funkční a ošetřen výjimkami, vykreslovací mechanika, ověřování legálních tahů atd, je plně funkční a nově i bez stackoverflow errorů, které jsem kvůli rekurzi funkcí řešil velmi často. Stačí mi pouze napsat herní pravidla a ukládání aktuální pozice do souboru, pravděpodobně se vykašlu ne generování <a href="https://en.wikipedia.org/wiki/Forsyth%E2%80%93Edwards_Notation">FEN</a> stringů, což byl původní plán, jenže jsem neimplementoval mechaniku EN Passant, tak nemohu tuto metodu použít. Na en passantu jsem pracoval, ale kvůli časové tísni si myslím že bych pak projekt nedokončil.
+* kod je v této fázi plně funkční a ošetřen výjimkami, vykreslovací mechanika, ověřování legálních tahů atd, je plně funkční a nově i bez stackoverflow errorů, které jsem kvůli rekurzi funkcí řešil velmi často. Stačí mi pouze napsat herní pravidla a ukládání aktuální pozice do souboru, pravděpodobně se vykašlu na generování <a href="https://en.wikipedia.org/wiki/Forsyth%E2%80%93Edwards_Notation">FEN</a> stringů, což byl původní plán, jenže jsem neimplementoval mechaniku EN Passant, tak nemohu tuto metodu použít. Na en passantu jsem pracoval, ale kvůli časové tísni si myslím že bych pak projekt nedokončil.
 
 ## Commit 5 - Update 3.6.2023
 * Hra je plně funkční, nejedná se o kompletní šachy, ale verzi šachů bez en passantu a metody šachu, ta je na kontrole uživatele. 
@@ -45,7 +45,7 @@ Jedním z mých cílů, je procvičit si použití co největšího objemu probr
  * [X] ABSTRAKCE - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-Abstraction.aspx
  * [X] ROZHRANÍ - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-Interface.aspx
  * [ ] PŘETÍŽENÍ OPERÁTORŮ - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-OperatorOverloading.aspx
- * [ ] STRUKTURA - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-Struct.aspx
+ * [X] STRUKTURA - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-Struct.aspx
  * [ ] ZÁZNAM - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-Record.aspx
  * [X] S.O.L.I.D. - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-SOLID.aspx
  * [ ] GERERIKA - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-Generics.aspx

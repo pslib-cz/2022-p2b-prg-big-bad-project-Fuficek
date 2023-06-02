@@ -1,433 +1,8 @@
-﻿/* LÁTKA PROBRANÁ ZA TENTO ŠKOLNÍ ROK, A ZDA BYLA VYUŽITA
- * [X] POLE - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-Array.aspx
- * [X] TŘÍDY A OBJEKTY - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-Class.aspx
- * [X] VÝJIMKY - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-Exception.aspx
- * [X] DĚDIČNOST - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-Inheritence.aspx
- * [X] ZAPOUZDŘENÍ - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-Encapsulation.aspx
- * [X] POLYMORFISMUS - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-Polymorphism.aspx
- * [X] STATICKÉ TŘÍDY A ČLENY - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-Static.aspx
- * [X] ABSTRAKCE - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-Abstraction.aspx
- * [X] ROZHRANÍ - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-Interface.aspx
- * [ ] PŘETÍŽENÍ OPERÁTORŮ - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-OperatorOverloading.aspx
- * [ ] STRUKTURA - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-Struct.aspx
- * [ ] ZÁZNAM - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-Record.aspx
- * [X] S.O.L.I.D. - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-SOLID.aspx
- * [ ] GERERIKA - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-Generics.aspx
- * [ ] KOLEKCE - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-Collection.aspx
- * [X] SEZNAM - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-Col-List.aspx
- * [ ] SLOVNÍK - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-Dictionary.aspx
- * [ ] FRONTA - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-Queue.aspx
- * [ ] ZÁSOBNÍK - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-Stack.aspx
- * [ ] DELEGÁTY - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-Delegates.aspx
- * [ ] ROZŠIŘUJÍCÍ METODY - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-ExtensionMethods.aspx
- * [ ] LINQ - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-LINQ.aspx
- * [ ] DATUM A ČAS - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-DateTime.aspx
- * [ ] STOPKY - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-Stopwatch.aspx
- * [ ] TESTOVÁNÍ - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-Testing.aspx
- * [ ] JEDNOTKOVÉ TESTOVÁNÍ - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-UnitTesting.aspx
- * [ ] BENCHMARK - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-Benchmark.aspx
- * [ ] ŘETĚZCE - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-String.aspx
- * [X] REGEX - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-RegularExpression.aspx
- * [ ] SOUBOROVÝ SYSTÉM - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-FileSystem.aspx
- * [ ] ARGS - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-CommandLineArgs.aspx
- * [ ] TEXTOVÉ SOUBORY - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-TextFile.aspx
- * [ ] BINÁRNÍ SOUBORY - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-BinaryFile.aspx
- * [ ] ŠIFROVÁNÍ - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-Ciphers.aspx
- * [ ] AES - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-AES.aspx
- * [ ] RSA - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-RSA.aspx
- * [ ] HASHOVÁNÍ - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-Hash.aspx
- * [ ] SPOJOVÝ SEZNAM - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-LinkedList.aspx
- * [ ] BINÁRNÍ STROM - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-BinaryTree.aspx
- * [X] VÝSTUP NA KONZOLI - https://pslib.sharepoint.com/sites/studium/prg/SitePages/CSharp-Console.aspx
-*/
-
-
-/* ======== TODO ========
- * logging the game moves into a text file - e4 e5, Nf3 f5, d4 Nf6, .. ..
- * allow the players to change their names
- * implement the mechanic of checks
- * en passant
- * casteling
- */
-
-using System;
+﻿using System;
 using System.Linq.Expressions;
 using System.Text.RegularExpressions;
+using chessgame;
 
-interface IMovable
-{
-    bool IsValidMove(int newPosition);
-}
-abstract class ChessPiece
-{
-    public bool IsWhite { get; set; }
-    public int Position { get; set; }
-    public char Symbol { get; set; }
-
-    public ChessPiece(bool isWhite, int position, char symbol)
-    {
-        IsWhite = isWhite;
-        Position = position;
-        Symbol = symbol;
-    }
-    public abstract bool IsValidMove(int newPosition);
-}
-
-class Pawn : ChessPiece, IMovable
-{
-    public bool HasMoved { get; set; }
-    private readonly ChessBoard chessBoard; // Instance variable
-
-    public Pawn(bool isWhite, int position, ChessBoard chessBoard)
-        : base(isWhite, position, isWhite ? 'P' : 'p')
-    {
-        HasMoved = false;
-        this.chessBoard = chessBoard; // Initialize the instance variable
-    }
-
-
-    public override bool IsValidMove(int newPosition)
-    {
-        int rowDifference = Math.Abs((newPosition / 8) - (Position / 8));
-        int colDifference = Math.Abs((newPosition % 8) - (Position % 8));
-
-        if (IsWhite)
-        {
-            ChessPiece? piece = chessBoard.GetPiece(newPosition);
-            // Pawns can only move forward
-            if (newPosition < Position)
-                return false;
-
-            // Pawns can move one or two squares forward on their first move
-            if (!HasMoved && rowDifference == 2 && colDifference == 0)
-                if (piece != null)
-                {
-                    return false;
-                }
-                else return true;
-            else if (rowDifference == 1 && colDifference == 0)
-                if (piece != null)
-                {
-                    return false;
-                }
-                else return true;
-
-            // Pawns can move diagonally to capture an opponent's piece
-            if (rowDifference == 1 && colDifference == 1)
-            {
-                if (piece != null && piece.IsWhite != IsWhite && colDifference == 1) // Checking if the target position contains an opponent's piece and it's not in the same column
-                    return true;
-            }
-        }
-        else
-        {
-            ChessPiece? piece = chessBoard.GetPiece(newPosition);
-            // Pawns can only move backward
-            if (newPosition > Position)
-                return false;
-
-            // Pawns can move one or two squares backward on their first move
-            if (!HasMoved && rowDifference == 2 && colDifference == 0)
-                if (piece != null)
-                {
-                    return false;
-                }
-                else return true;
-            else if (rowDifference == 1 && colDifference == 0)
-                if (piece != null)
-                {
-                    return false;
-                }
-                else return true;
-
-            // Pawns can move diagonally to capture an opponent's piece
-            if (rowDifference == 1 && colDifference == 1)
-            {
-                if (piece != null && piece.IsWhite != IsWhite && colDifference == 1) // Checking if the target position contains an opponent's piece and it's not in the same column
-                    return true;
-            }
-        }
-
-        return false;
-    }
-
-}
-
-class Queen : ChessPiece, IMovable
-{
-    private readonly ChessBoard chessBoard; // Instance variable
-
-    public Queen(bool isWhite, int position, ChessBoard chessBoard)
-        : base(isWhite, position, isWhite ? 'Q' : 'q')
-    {
-        this.chessBoard = chessBoard; // Initialize the instance variable
-    }
-
-    public override bool IsValidMove(int newPosition)
-    {
-        int rowDifference = Math.Abs((newPosition / 8) - (Position / 8));
-        int colDifference = Math.Abs((newPosition % 8) - (Position % 8));
-
-        // Queens can move in rows, columns, and diagonals
-        if (rowDifference == 0 || colDifference == 0 || rowDifference == colDifference)
-        {
-            int rowDirection = Math.Sign(newPosition / 8 - Position / 8);
-            int colDirection = Math.Sign(newPosition % 8 - Position % 8);
-
-            int row = Position / 8 + rowDirection;
-            int col = Position % 8 + colDirection;
-
-            while (row != newPosition / 8 || col != newPosition % 8)
-            {
-                ChessPiece? piece = chessBoard.GetPiece(row * 8 + col);
-                if (piece != null)
-                {
-                    // A piece is blocking the queen's path
-                    return false;
-                }
-
-                row += rowDirection;
-                col += colDirection;
-            }
-            return true;
-        }
-
-        return false;
-    }
-}
-
-
-
-class King : ChessPiece, IMovable
-{
-    public bool HasMoved { get; set; }
-    public bool CanCastle { get; set; } = true;
-
-    private readonly ChessBoard chessBoard;
-
-
-    public King(bool isWhite, int position, ChessBoard chessBoard)
-        : base(isWhite, position, isWhite ? 'K' : 'k')
-    {
-        HasMoved = false;
-        this.chessBoard = chessBoard;
-    }
-
-    public override bool IsValidMove(int newPosition)
-    {
-        int rowDifference = Math.Abs((newPosition / 8) - (Position / 8));
-        int colDifference = Math.Abs((newPosition % 8) - (Position % 8));
-
-        // Kings can move one square in any direction
-        if ((rowDifference == 1 && colDifference == 1) || (rowDifference == 1 && colDifference == 0) || (rowDifference == 0 && colDifference == 1))
-        {
-            return true;
-        }
-
-        // Check for castling
-        if (colDifference == 2 && newPosition / 8 == Position / 8)
-        {
-            // Check if the rook is present in the correct position
-            int rookPosition;
-            int rookNewPosition;
-            int rookColumn;
-            if (newPosition % 8 > Position % 8)
-            {
-                // King-side castling
-                rookPosition = (Position / 8) * 8 + 7;
-                rookNewPosition = rookPosition - 2;
-                rookColumn = 7;
-            }
-            else
-            {
-                // Queen-side castling
-                rookPosition = (Position / 8) * 8;
-                rookNewPosition = rookPosition + 3;
-                rookColumn = 0;
-            }
-            ChessPiece? rook = chessBoard.GetPiece(rookPosition);
-            if (rook is Rook && !((Rook)rook).HasMoved && rook.Position == rookPosition && rook.Position / 8 == newPosition / 8 && rook.Position % 8 == rookColumn)
-            {
-                // Check if there are no pieces between the king and rook
-                int step = newPosition > Position ? 1 : -1;
-                for (int column = Position % 8 + step; column != rookColumn; column += step)
-                {
-                    if (chessBoard.GetPiece(Position / 8 * 8 + column) != null)
-                    {
-                        return false;
-                    }
-                }
-                rook.Position = rookNewPosition;
-                return true;
-            }
-        }
-        return false;
-    }
-
-
-}
-
-class Rook : ChessPiece, IMovable
-{
-    public bool HasMoved { get; set; }
-    private readonly ChessBoard chessBoard;
-    public bool CanCastle { get; set; } = true;
-
-
-    public Rook(bool isWhite, int position, ChessBoard chessBoard)
-        : base(isWhite, position, isWhite ? 'R' : 'r')
-    {
-        HasMoved = false;
-        this.chessBoard = chessBoard;
-    }
-
-    public override bool IsValidMove(int newPosition)
-    {
-        // Check if the new position is on the same row or column
-        int rowDifference = Math.Abs((newPosition / 8) - (Position / 8));
-        int colDifference = Math.Abs((newPosition % 8) - (Position % 8));
-
-        if (rowDifference == 0 || colDifference == 0)
-        {
-            int step = rowDifference > 0 ? 8 : 1; // Define the step size based on the direction
-
-            // Check for any pieces in the path
-            int currentPos = Position + step;
-            while (currentPos != newPosition)
-            {
-                ChessPiece? piece = chessBoard.GetPiece(currentPos);
-                if (piece != null)
-                {
-                    // There is a piece in the path, invalid move
-                    return false;
-                }
-                currentPos += step;
-            }
-
-            return true;
-        }
-
-        return false;
-    }
-
-}
-
-
-class Knight : ChessPiece, IMovable
-{
-    public Knight(bool isWhite, int position)
-        : base(isWhite, position, isWhite ? 'N' : 'n')
-    {
-    }
-
-    public override bool IsValidMove(int newPosition)
-    {
-        // Check if the new position is a valid knight move
-        int rowDifference = Math.Abs((newPosition / 8) - (Position / 8));
-        int colDifference = Math.Abs((newPosition % 8) - (Position % 8));
-        return (rowDifference == 2 && colDifference == 1) ||
-               (rowDifference == 1 && colDifference == 2);
-    }
-}
-
-class Bishop : ChessPiece, IMovable
-{
-    private readonly ChessBoard chessBoard;
-    public Bishop(bool isWhite, int position, ChessBoard chessBoard) 
-        : base(isWhite, position, isWhite ? 'B' : 'n')
-    {
-        this.chessBoard = chessBoard;
-        Symbol = isWhite ? 'B' : 'b';
-    }
-    public override bool IsValidMove(int newPosition)
-    {
-        int rowDifference = Math.Abs((newPosition / 8) - (Position / 8));
-        int colDifference = Math.Abs((newPosition % 8) - (Position % 8));
-
-        // Check if the new position is on the same diagonal
-        if (rowDifference == colDifference)
-        {
-            int rowDirection = (newPosition / 8) > (Position / 8) ? 1 : -1;
-            int colDirection = (newPosition % 8) > (Position % 8) ? 1 : -1;
-
-            int row = Position / 8 + rowDirection;
-            int col = Position % 8 + colDirection;
-
-            while (row != newPosition / 8 && col != newPosition % 8)
-            {
-                ChessPiece? piece = chessBoard.GetPiece(row * 8 + col);
-                if (piece != null)
-                    return false;
-
-                row += rowDirection;
-                col += colDirection;
-            }
-
-            ChessPiece? destinationPiece = chessBoard.GetPiece(newPosition);
-            return destinationPiece == null || destinationPiece.IsWhite != IsWhite;
-        }
-
-        return false;
-    }
-
-}
-class ChessBoard
-{
-    public List<ChessPiece> Pieces { get; set; }
-
-    public ChessBoard()
-    {
-        Pieces = new List<ChessPiece>();
-    }
-
-
-
-    public bool IsKingCaptured(bool isWhite)
-    {
-        return Pieces.Any(piece => piece is King && piece.IsWhite == isWhite);
-    }
-
-    public bool MovePiece(int fromPosition, int toPosition)
-    {
-        ChessPiece? startPiece = GetPiece(fromPosition);
-        ChessPiece? endPiece = GetPiece(toPosition);
-
-        if (startPiece != null)
-        {
-            // Remove the end piece if it exists
-            if (endPiece != null)
-            {
-                Console.WriteLine(endPiece + " was captured");
-                Pieces.Remove(endPiece);
-            }
-            // Move the piece to the end position
-            startPiece.Position = toPosition;
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("The move was legal");
-            Console.ForegroundColor = ConsoleColor.White;
-
-            return true;
-        }
-        return false;
-    }
-
-    public ChessPiece? GetPiece(int position)
-    {
-        return Pieces.Find(piece => piece.Position == position);
-    }
-}
-
-class Player
-{
-    public string Name { get; set; }
-    public bool IsWhite { get; set; }
-
-    public Player(string name, bool isWhite)
-    {
-        Name = name;
-        IsWhite = isWhite;
-    }
-}
 class Program
 {
     public static void Main()
@@ -510,9 +85,54 @@ class Program
         {
             Console.WriteLine("It's a draw!");
         }
-        Console.WriteLine();
+        bool savePosition = true;
+        while (savePosition)
+        {
+            Console.WriteLine();
+            Console.WriteLine("Enter the file name (or 'no' to not save the position):");
+            string? fileName = Console.ReadLine();
+
+            try
+            {
+                if (string.IsNullOrEmpty(fileName))
+                {
+                    throw new ArgumentException("File name cannot be null or empty.");
+                }
+
+                if (fileName.ToLower() == "no")
+                {
+                    savePosition = false;
+                    Console.WriteLine("Position not saved.");
+                }
+                else
+                {
+                    string filePath = fileName + ".txt";
+
+                    if (File.Exists(filePath))
+                    {
+                        Console.WriteLine("File already exists. Choose a different file name.");
+                    }
+                    else
+                    {
+                        ChessBoard.SaveGameMoves(filePath);
+                        Console.WriteLine("Game moves saved to: " + filePath);
+                        savePosition = false;
+                    }
+                }
+            }
+            catch (ArgumentException ex)
+            {
+                Console.WriteLine("Invalid input: " + ex.Message);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("An error occurred: " + ex.Message);
+            }
+        }
+
         Console.WriteLine("Press any key to exit...");
         Console.ReadKey();
+
     }
     static bool PlayerToMove(string name, int[] chessBoardPosition, ChessBoard chessBoard, bool whiteToMove)
     {
@@ -567,7 +187,7 @@ class Program
             {
                 throw new ArgumentException("Invalid end position.");
             }
-
+            chessBoard.moves.Add(input);
             // Find the pieces
             ChessPiece? startPiece = chessBoard.Pieces.Find(p => p.Position == startIndex);
             ChessPiece? endPiece = chessBoard.Pieces.Find(p => p.Position == endIndex);

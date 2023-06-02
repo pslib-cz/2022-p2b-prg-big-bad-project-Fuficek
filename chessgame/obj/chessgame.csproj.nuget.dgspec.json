@@ -11,7 +11,7 @@
         "projectName": "chessgame",
         "projectPath": "C:\\Users\\Matěj\\source\\repos\\2022-p2b-prg-big-bad-project-Fuficek\\chessgame\\chessgame.csproj",
         "packagesPath": "C:\\Users\\Matěj\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Matěj\\Source\\Repos\\2022-p2b-prg-big-bad-project-Fuficek\\chessgame\\obj\\",
+        "outputPath": "C:\\Users\\Matěj\\source\\repos\\2022-p2b-prg-big-bad-project-Fuficek\\chessgame\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Matěj\\AppData\\Roaming\\NuGet\\NuGet.Config",

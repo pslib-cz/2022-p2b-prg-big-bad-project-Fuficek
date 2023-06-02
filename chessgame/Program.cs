@@ -237,7 +237,6 @@ class King : ChessPiece, IMovable
                 rookPosition = (Position / 8) * 8 + 7;
                 rookNewPosition = rookPosition - 2;
                 rookColumn = 7;
-                Console.WriteLine("ks check");
             }
             else
             {
@@ -245,10 +244,7 @@ class King : ChessPiece, IMovable
                 rookPosition = (Position / 8) * 8;
                 rookNewPosition = rookPosition + 3;
                 rookColumn = 0;
-                Console.WriteLine("qs check");
             }
-            Console.WriteLine(rookPosition);
-            
             ChessPiece? rook = chessBoard.GetPiece(rookPosition);
             if (rook is Rook && !((Rook)rook).HasMoved && rook.Position == rookPosition && rook.Position / 8 == newPosition / 8 && rook.Position % 8 == rookColumn)
             {
@@ -383,6 +379,14 @@ class ChessBoard
     {
         Pieces = new List<ChessPiece>();
     }
+
+
+
+    public bool IsKingCaptured(bool isWhite)
+    {
+        return Pieces.Any(piece => piece is King && piece.IsWhite == isWhite);
+    }
+
     public bool MovePiece(int fromPosition, int toPosition)
     {
         ChessPiece? startPiece = GetPiece(fromPosition);
@@ -479,7 +483,7 @@ class Program
         */
 
         bool whiteToMove = true;
-        while (true)
+        while (ChessBoard.IsKingCaptured(true) && ChessBoard.IsKingCaptured(false))
         {
             PrintChessBoard(ChessBoard);
             if (whiteToMove is true)
@@ -493,6 +497,22 @@ class Program
                 if (moved is true) { whiteToMove = true; }
             }
         }
+        Console.Clear();
+        if (ChessBoard.IsKingCaptured(false) is true)
+        {
+            Console.WriteLine("Black player (player 2) wins!");
+        }
+        else if (ChessBoard.IsKingCaptured(true) is true)
+        {
+            Console.WriteLine("White player (player 1) wins!");
+        }
+        else
+        {
+            Console.WriteLine("It's a draw!");
+        }
+        Console.WriteLine();
+        Console.WriteLine("Press any key to exit...");
+        Console.ReadKey();
     }
     static bool PlayerToMove(string name, int[] chessBoardPosition, ChessBoard chessBoard, bool whiteToMove)
     {

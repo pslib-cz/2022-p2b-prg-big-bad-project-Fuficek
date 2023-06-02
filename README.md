@@ -3,11 +3,15 @@
 
 # CHESS
 Nejedná se o kompletní šachy, ale verzi šachů bez en passantu a metody šachu, ta je na kontrole uživatele. Program respektuje základní pravidla šachů pro tahy figur, a ověřuje jejich pravdivost.
-## Jak hrát?
+### Jak hrát?
 * Hra má velmi intuitivní ovládání, je pro 2 hráče kteří se střídají na tahu. 
 * Zápis pohybu figur je pomocí <a href="https://en.mimi.hu/chess/long_algebraic_notation.html - Moves">LONG ALGEBRAIC NOTATION</a>. 
 * Program vás při zadání špatného inputu vyzve pro opakování tahu. 
 * Hra končí jakmile je sebrána figurka krále jednoho z hráčů, ten, jehož král zůstává je výhercem.
+
+### Testovací pozice
+* V soubou Chess positions.txt jsem uložil 2 testovací pozice, jedna je na rošádu a druhá na Mat v 1 (sebrání krále).
+* Tyto pozice mohou být při kompletním zkopírování pravým tlačítkem myši zkopírovány do programu
 
 ## Commit 1 - Update 14.5.2023
 * Jelikož mi byla zamítnuta verze používající windows forms pro generování GUI, byl jsem proto nucen předělat celou hru do konzole. V prvním commitu je hlavní práce za víkend *12.-14.5.2023.*

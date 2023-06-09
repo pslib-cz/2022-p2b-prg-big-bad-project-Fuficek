@@ -22,32 +22,36 @@ namespace chessgame
 
         public override bool IsValidMove(int newPosition)
         {
-            // Check if the new position is on the same row or column
             int rowDifference = Math.Abs((newPosition / 8) - (Position / 8));
             int colDifference = Math.Abs((newPosition % 8) - (Position % 8));
 
+            // Rooks can move in rows or columns
             if (rowDifference == 0 || colDifference == 0)
             {
-                int step = rowDifference > 0 ? 8 : 1; // Define the step size based on the direction
+                int rowDirection = Math.Sign(newPosition / 8 - Position / 8);
+                int colDirection = Math.Sign(newPosition % 8 - Position % 8);
 
-                // Check for any pieces in the path
-                int currentPos = Position + step;
-                while (currentPos != newPosition)
+                int row = Position / 8 + rowDirection;
+                int col = Position % 8 + colDirection;
+
+                while (row != newPosition / 8 || col != newPosition % 8)
                 {
-                    ChessPiece? piece = chessBoard.GetPiece(currentPos);
+                    ChessPiece? piece = chessBoard.GetPiece(row * 8 + col);
                     if (piece != null)
                     {
-                        // There is a piece in the path, invalid move
+                        // A piece is blocking the rook's path
                         return false;
                     }
-                    currentPos += step;
-                }
 
+                    row += rowDirection;
+                    col += colDirection;
+                }
                 return true;
             }
 
             return false;
         }
+
 
     }
 }

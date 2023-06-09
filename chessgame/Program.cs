@@ -50,7 +50,7 @@ class Program
         }
 
         /* 
-        // Prints out the position of all the pieces on the chessboard
+        // Prints out the position of all the pieces on the chessboard -- used for debugging purpouses
         foreach (ChessPiece piece in ChessBoard.Pieces)
         {
             Console.WriteLine($"{piece.Symbol} - Position: {piece.Position}");
@@ -202,9 +202,13 @@ class Program
             Console.WriteLine("________________________________________");
             if (startPiece != null && startPiece.IsWhite == whiteToMove)
             {
+                if (endPiece != null && endPiece.IsWhite == startPiece.IsWhite)
+                {
+                    ThrowError("The move was illegal!"); return false;
+                }
                 // Check if the piece has a valid move to the end position
                 if (startPiece.IsValidMove(endIndex))
-                {
+                {   
                     chessBoard.MovePiece(startIndex, endIndex);
                     return true;
                 }

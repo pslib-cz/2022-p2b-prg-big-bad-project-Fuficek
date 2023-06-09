@@ -1,0 +1,26 @@
+THESE MOVES ARE PREPAIRED TO BE COPY PASTED INTO CONSOLE (They are used to test key mechanics of the game)
+Since the program checks for legal moves, the string 'Next move' can be ignored, but will throw an exception.
+
+PREPARE FOR KING SIDE CASTLE FOR WHITE
+e2 e4
+e7 e5
+g1 f3
+b8 c6
+f1 c4
+f8 c5
+Next move
+e1 g1
+
+
+Checkmate in 1 black (white wins on next move)
+e2 e4
+e7 e5
+d1 h5
+b8 c6
+f1 c4
+g8 f6
+h5 f7
+e8 f7
+
+Next move
+c4 f7
